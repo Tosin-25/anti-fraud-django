@@ -1,0 +1,240 @@
+{% load static %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Accounting System</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container" id="mainContainer">
+        <div id="userLoginPage" class="page-section active">
+            <div class="header">
+                <h1>💰 Automated Accounting System</h1>
+                <p>Personal Finance Management</p>
+            </div>
+
+            <div class="login-card">
+                <h3>🔐 User Login</h3>
+                <div class="form-group">
+                    <label>Email Address:</label>
+                    <input type="email" id="userEmail" placeholder="Enter your email address">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="userPassword" placeholder="Enter your password">
+                </div>
+                <button class="btn" onclick="userLogin()">Login to Dashboard</button>
+            </div>
+
+            <div class="switch-link">
+                <a href="#" onclick="showUserSignup()">📝 Create New Account</a> | 
+                <a href="#" onclick="showAdminLogin()">🔒 Admin Portal Access</a>
+            </div>
+        </div>
+
+        <div id="userSignupPage" class="page-section">
+            <div class="header">
+                <h1>💰 Automated Accounting System</h1>
+                <p>Create Your Personal Finance Account</p>
+            </div>
+
+            <div class="login-card">
+                <h3>📝 Create New Account</h3>
+                <div class="form-group">
+                    <label>Full Name:</label>
+                    <input type="text" id="signupFullName" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label>Email Address:</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email address">
+                </div>
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" id="signupUsername" placeholder="Choose a username (optional, for display)">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="signupPassword" placeholder="Choose a password">
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password:</label>
+                    <input type="password" id="signupConfirmPassword" placeholder="Confirm your password">
+                </div>
+                <button class="btn" onclick="userSignup()">Create Account</button>
+                
+                <div class="demo-info">
+                    <strong>Account Creation:</strong><br>
+                    Fill out all fields to create your personal finance account
+                </div>
+            </div>
+
+            <div class="switch-link">
+                <a href="#" onclick="showUserLogin()">👤 Already have an account? Login here</a>
+            </div>
+        </div>
+
+        <div id="adminLoginPage" class="page-section">
+            <div class="admin-header">
+                <h1>🛡️ ADMIN PORTAL</h1>
+                <p>System Administration & Monitoring</p>
+            </div>
+
+            <div class="login-card">
+                <h3>👨‍💼 Administrator Access</h3>
+                <div class="form-group">
+                    <label>Admin Email:</label>
+                    <input type="email" id="adminEmail" placeholder="Enter admin email address">
+                </div>
+                <div class="form-group">
+                    <label>Admin Password:</label>
+                    <input type="password" id="adminPassword" placeholder="Enter admin password">
+                </div>
+                <button class="btn btn-admin" onclick="adminLogin()">Access Admin Panel</button>
+                
+                <div class="demo-info">
+                    <strong>Admin Access:</strong><br>
+                    Enter admin email and password to access the admin panel
+                </div>
+            </div>
+
+            <div class="switch-link">
+                <a href="#" onclick="showUserLogin()">👤 Back to User Login</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="userDashboard" class="page-section">
+        <div class="container dashboard-container">
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <h2>👤 Personal Dashboard</h2>
+                    <p>Welcome back, <span id="currentUser"></span>!</p>
+                </div>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>💚 Total Income</h3>
+                    <div class="amount" id="totalIncome">$0.00</div>
+                </div>
+                <div class="stat-card expense">
+                    <h3>💸 Total Expenses</h3>
+                    <div class="amount" id="totalExpenses">$0.00</div>
+                </div>
+                <div class="stat-card balance">
+                    <h3>💰 Net Balance</h3>
+                    <div class="amount" id="netBalance">$0.00</div>
+                </div>
+            </div>
+
+            <div class="transaction-form">
+                <h3>➕ Add New Transaction</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Type:</label>
+                        <select id="transactionType">
+                            <option value="income">💚 Income</option>
+                            <option value="expense">💸 Expense</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount:</label>
+                        <input type="number" id="transactionAmount" placeholder="0.00" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Category:</label>
+                        <select id="transactionCategory">
+                            <option value="">Select category</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <textarea id="transactionDescription" placeholder="Enter transaction description..."></textarea>
+                </div>
+                <button class="btn" onclick="addTransaction()">Add Transaction</button>
+            </div>
+
+            <div class="transactions-table">
+                <div class="table-header">
+                    <div>Date</div>
+                    <div>Type</div>
+                    <div>Amount</div>
+                    <div>Description</div>
+                    <div>Category</div>
+                </div>
+                <div id="userTransactionsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminDashboard" class="page-section">
+        <div class="container dashboard-container">
+            <div class="admin-header">
+                <h1>🛡️ SYSTEM ADMINISTRATION</h1>
+                <p>Complete System Overview & Transaction Monitoring</p>
+            </div>
+
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <h2>👨‍💼 Admin Control Panel</h2>
+                    <p>Logged in as: <span id="currentAdmin"></span></p>
+                </div>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card admin">
+                    <h3>👥 Active Users</h3>
+                    <div class="amount" id="totalUsers">0</div>
+                </div>
+                <div class="stat-card admin">
+                    <h3>📊 Total Transactions</h3>
+                    <div class="amount" id="totalTransactions">0</div>
+                </div>
+                <div class="stat-card balance">
+                    <h3>💰 System Balance</h3>
+                    <div class="amount" id="systemTotal">$0.00</div>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label><strong>Filter by User:</strong></label>
+                    <select id="userFilter">
+                        <option value="">All Users</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label><strong>Filter by Type:</strong></label>
+                    <select id="typeFilter">
+                        <option value="">All Types</option>
+                        <option value="income">Income Only</option>
+                        <option value="expense">Expenses Only</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button class="btn btn-admin" onclick="applyFilters()">Apply Filters</button>
+                </div>
+            </div>
+
+            <div class="transactions-table">
+                <div class="table-header admin admin-header">
+                    <div>Date</div>
+                    <div>User</div>
+                    <div>Type</div>
+                    <div>Amount</div>
+                    <div>Description</div>
+                    <div>Category</div>
+                </div>
+                <div id="adminTransactionsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
